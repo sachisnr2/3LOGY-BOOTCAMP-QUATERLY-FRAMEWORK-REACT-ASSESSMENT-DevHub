@@ -1,27 +1,79 @@
-// ============================================
-// 🔨 DevShelf — App.jsx
-// ============================================
-// This is your starting point!
-// Replace this entire file with your own code.
-// Follow ASSESSMENT.md → Sprint 1, Step 1.8
-// ============================================
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Navbar from "./components/Navbar";
+
+// Pages
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";     
+import SnippetsPage from "./pages/SnippetsPage";       
+import ResourcesPage from "./pages/ResourcesPage";     
+import TasksPage from "./pages/TasksPage";             
+import SnippetDetailPage from "./pages/SnippetDetailPage"; 
 
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-indigo-600 mb-4">
-          🗂️ DevShelf
-        </h1>
-        <p className="text-gray-600 text-lg mb-2">
-          Your React app is running!
-        </p>
-        <p className="text-gray-400">
-          Open <code className="bg-gray-100 px-2 py-1 rounded text-sm">ASSESSMENT.md</code> and start building.
-        </p>
-      </div>
-    </div>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <Navbar />
+        <Toaster position="top-right" />
+
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/snippets"
+            element={
+              <ProtectedRoute>
+                <SnippetsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/snippets/:id"
+            element={
+              <ProtectedRoute>
+                <SnippetDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources"
+            element={
+              <ProtectedRoute>
+                <ResourcesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <ProtectedRoute>
+                <TasksPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Redirect root */}
+          <Route path="/" element={<LoginPage />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

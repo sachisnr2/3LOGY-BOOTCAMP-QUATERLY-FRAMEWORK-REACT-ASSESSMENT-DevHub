@@ -49,3 +49,10 @@ body {
 #root {
   min-height: 100vh;
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dark {
+  color-scheme: dark;
+}
