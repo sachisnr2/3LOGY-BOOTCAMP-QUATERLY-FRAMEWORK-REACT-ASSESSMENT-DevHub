@@ -7,27 +7,24 @@ const Navbar = () => {
   const { user, isAuthenticated, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const [darkMode, setDarkMode] = useState(false);
+  
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('darkMode') === 'true';
+  });
 
-  // Load dark mode preference
+  // Apply dark mode class on mount and when darkMode changes
   useEffect(() => {
-    const savedMode = localStorage.getItem('darkMode') === 'true';
-    setDarkMode(savedMode);
-    if (savedMode) {
+    if (darkMode) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  }, []);
+  }, [darkMode]);
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem('darkMode', newMode);
-    
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   const handleLogout = () => {
@@ -49,7 +46,6 @@ const Navbar = () => {
             <span className="text-2xl font-bold text-gray-900 dark:text-white">DevShelf</span>
           </Link>
 
-          {/* Navigation */}
           {isAuthenticated && (
             <div className="hidden md:flex items-center gap-8">
               <Link to="/dashboard" className={`font-medium ${isActive("/dashboard") ? "text-indigo-600 dark:text-indigo-400" : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}>Dashboard</Link>
@@ -62,7 +58,8 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition"
+              title="Toggle theme"
             >
               {darkMode ? "☀️" : "🌙"}
             </button>
